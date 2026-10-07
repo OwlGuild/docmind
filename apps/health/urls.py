@@ -1,3 +1,8 @@
 from django.urls import path
-from .views import health
-urlpatterns=[path('', health)]
+
+from .views import health, ready
+
+urlpatterns = [
+    path('', health),
+    path('ready/', ready),
+]
