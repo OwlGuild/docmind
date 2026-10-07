@@ -1,4 +1,4 @@
-Contributing to OwlGuild DevFlow.
+Contributing to OwlGuild DocMind.
 - Small PRs
 - English commit messages (imperative)
 - One concern per commit
