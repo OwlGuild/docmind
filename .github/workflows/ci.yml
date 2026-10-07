@@ -10,7 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      SECRET_KEY: ci-only-not-a-real-secret
+      SECRET_KEY: ci-only-not-a-real-secret-wxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuv
       DEBUG: 'false'
       ALLOWED_HOSTS: localhost,127.0.0.1
       DATABASE_URL: postgresql://docmind:docmind@localhost:5432/docmind
