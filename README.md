@@ -3,6 +3,7 @@
 Vector search and retrieval-augmented generation over documents, built on PostgreSQL
 `pgvector`. Part of the [OwlGuild](https://github.com/OwlGuild) family.
 
+[![CI](https://github.com/OwlGuild/docmind/actions/workflows/ci.yml/badge.svg)](https://github.com/OwlGuild/docmind/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
 [![PostgreSQL](https://img.shields.io/badge/postgresql-16-336791.svg)](https://www.postgresql.org/)
 [![pgvector](https://img.shields.io/badge/vector-pgvector-4d4d4d.svg)](https://github.com/pgvector/pgvector)
