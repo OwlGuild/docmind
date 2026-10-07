@@ -5,15 +5,15 @@ Vector search and retrieval-augmented generation over documents, built on Postgr
 
 [![CI](https://github.com/OwlGuild/docmind/actions/workflows/ci.yml/badge.svg)](https://github.com/OwlGuild/docmind/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
+[![Django](https://img.shields.io/badge/django-5.0-092E20.svg)](https://www.djangoproject.com/)
 [![PostgreSQL](https://img.shields.io/badge/postgresql-16-336791.svg)](https://www.postgresql.org/)
-[![pgvector](https://img.shields.io/badge/vector-pgvector-4d4d4d.svg)](https://github.com/pgvector/pgvector)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
 
 ## Why this exists
 
 Keyword search finds the word you used. It does not find the idea you meant. DocMind keeps
 everything inside PostgreSQL — no separate vector database to run, back up or pay for — and
-answers questions with the passages that actually support the answer, each with a citation.
+returns the passages that actually support the answer, each with a citation.
 
 ## How it works
 
@@ -26,38 +26,51 @@ document
   → rank, then return passages with their source offsets
 ```
 
-`pgvector` handles similarity search with an HNSW index. Nothing leaves the database.
-
 ## Stack
 
 | Layer | Choice |
 |---|---|
 | Runtime | Python 3.12 |
-| Database | PostgreSQL 16 + `pgvector` |
-| Embeddings | pluggable provider behind one interface |
-| API | Django REST Framework |
-| Queue | Celery for bulk ingestion |
-| Container | Docker + docker-compose |
+| Framework | Django 5 + Django REST Framework |
+| Database | PostgreSQL 16 (SQLite for tests) |
+| Search | `pgvector` with an HNSW index |
+| Container | Docker |
 
 ## Quickstart
 
 ```bash
 git clone https://github.com/OwlGuild/docmind.git
 cd docmind
-cp .env.example .env
-docker compose up --build
-docker compose exec api python manage.py migrate
-docker compose exec api python manage.py ingest /path/to/docs
+pip install -r requirements.txt
+python manage.py runserver
+curl http://localhost:8000/health/
+# {"status": "ok", "service": "docmind"}
 ```
 
 ## API
 
 | Method | Path | Description |
 |---|---|---|
-| `POST` | `/documents/` | upload a document for ingestion |
-| `GET` | `/documents/{id}/` | ingestion status and chunk count |
-| `POST` | `/search/` | nearest-neighbour search, returns ranked passages |
-| `POST` | `/ask/` | question → passages → answer with citations |
+| `GET` | `/health/` | liveness probe used by CI and uptime checks |
+
+## Testing
+
+```bash
+pip install -r requirements.txt
+pytest -q
+# 3 passed
+```
+
+The suite covers the health contract: status code, payload shape and routing. CI runs it on
+every push against Python 3.12.
+
+## Roadmap
+
+- Paragraph-boundary chunker with a seeded recall corpus
+- Pluggable embedding provider behind a single interface
+- `pgvector` schema, HNSW index and migrations
+- `POST /documents/`, `POST /search/` and `POST /ask/` endpoints
+- Celery queue for bulk ingestion
 
 ## Design notes
 
@@ -65,15 +78,6 @@ docker compose exec api python manage.py ingest /path/to/docs
 - **Embedding provider is an interface.** Swapping models changes one class, not the schema.
 - **Metadata is queryable.** Source, author and section filter results before ranking.
 - **The index is rebuilt offline.** Ingestion never blocks reads.
-
-## Testing
-
-```bash
-docker compose exec api pytest
-```
-
-Nearest-neighbour tests use a seeded corpus with known answers, so a regression in recall fails
-the build rather than shipping quietly.
 
 ## Ownership
 
