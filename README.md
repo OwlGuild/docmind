@@ -5,7 +5,7 @@ Vector search and retrieval-augmented generation over documents, built on Postgr
 
 [![CI](https://github.com/OwlGuild/docmind/actions/workflows/ci.yml/badge.svg)](https://github.com/OwlGuild/docmind/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
-[![Django](https://img.shields.io/badge/django-5.0-092E20.svg)](https://www.djangoproject.com/)
+[![Django](https://img.shields.io/badge/django-5.2-092E20.svg)](https://www.djangoproject.com/)
 [![PostgreSQL](https://img.shields.io/badge/postgresql-16-336791.svg)](https://www.postgresql.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
 
@@ -33,9 +33,9 @@ document
 | Layer | Choice |
 |---|---|
 | Runtime | Python 3.12 |
-| Framework | Django 5 + Django REST Framework |
-| Database | PostgreSQL 16 (SQLite for tests) |
-| Search | `pgvector` with an HNSW index |
+| Framework | Django 5.2 + Django REST Framework |
+| Database | PostgreSQL 16 (CI runs the suite against it; SQLite locally) |
+| Search | `pgvector` + HNSW — planned, see Roadmap |
 | Container | Docker |
 
 ## Quickstart
@@ -43,6 +43,7 @@ document
 ```bash
 git clone https://github.com/OwlGuild/docmind.git
 cd docmind
+cp .env.example .env
 pip install -r requirements.txt
 python manage.py runserver
 curl http://localhost:8000/health/
@@ -61,11 +62,12 @@ curl http://localhost:8000/health/
 ```bash
 pip install -r requirements.txt
 pytest -q
-# 3 passed
+# 8 passed
 ```
 
-The suite covers the health contract: status code, payload shape and routing. CI runs it on
-every push against Python 3.12.
+The suite covers the health contract — status codes, payload shape, browser (HTML) rendering
+and the readiness failure path — plus routing. CI runs it on every push against Python 3.12
+with a real PostgreSQL 16 + `pgvector` service.
 
 ## Roadmap
 
