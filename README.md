@@ -9,6 +9,8 @@ Vector search and retrieval-augmented generation over documents, built on Postgr
 [![PostgreSQL](https://img.shields.io/badge/postgresql-16-336791.svg)](https://www.postgresql.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
 
+**Live:** https://docmind-7p1f.onrender.com/health/ · [readiness](https://docmind-7p1f.onrender.com/health/ready/)
+
 ## Why this exists
 
 Keyword search finds the word you used. It does not find the idea you meant. DocMind keeps
@@ -52,6 +54,7 @@ curl http://localhost:8000/health/
 | Method | Path | Description |
 |---|---|---|
 | `GET` | `/health/` | liveness probe used by CI and uptime checks |
+| `GET` | `/health/ready/` | readiness probe, verifies the database |
 
 ## Testing
 
