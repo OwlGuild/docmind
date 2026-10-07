@@ -9,6 +9,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: ci-only-not-a-real-secret
+      DEBUG: 'false'
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      DATABASE_URL: postgresql://docmind:docmind@localhost:5432/docmind
     services:
       db:
         image: pgvector/pgvector:pg16
@@ -17,6 +22,11 @@ jobs:
           POSTGRES_USER: docmind
           POSTGRES_PASSWORD: docmind
         ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -24,6 +34,7 @@ jobs:
           python-version: '3.12'
       - run: pip install -r requirements.txt
       - run: python manage.py check
+      - run: python manage.py check --deploy
       - run: pytest -q
 
   docker:
