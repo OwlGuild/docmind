@@ -7,3 +7,5 @@ dj-database-url
 django-cors-headers
 gunicorn
 whitenoise
+pytest
+pytest-django
