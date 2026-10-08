@@ -13,8 +13,9 @@ Part of [OwlGuild](https://github.com/OwlGuild).
 
 ```bash
 pip install -r requirements.txt
+cp .env.example .env
 python manage.py check
-python manage.py check --deploy
+DEBUG=false python manage.py check --deploy --fail-level WARNING
 pytest -q
 ```
 
