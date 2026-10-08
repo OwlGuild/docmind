@@ -10,6 +10,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+RUN DJANGO_SECRET_KEY=build-time-only-collectstatic-key python manage.py collectstatic --noinput
+
 EXPOSE 8000
 
 CMD ["sh", "-c", "exec gunicorn core.wsgi:application --bind 0.0.0.0:${PORT:-8000}"]
