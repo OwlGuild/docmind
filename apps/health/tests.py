@@ -18,6 +18,7 @@ class HealthEndpointTests(TestCase):
     def test_health_renders_html_for_browsers(self):
         response = self.client.get('/health/', HTTP_ACCEPT='text/html')
         self.assertEqual(response.status_code, 200)
+        self.assertIn('text/html', response['Content-Type'])
 
     def test_health_rejects_post(self):
         response = self.client.post('/health/')
