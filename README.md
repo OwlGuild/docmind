@@ -61,13 +61,14 @@ curl http://localhost:8000/health/
 
 ```bash
 pip install -r requirements.txt
+cp .env.example .env
 pytest -q
 # 8 passed
 ```
 
 The suite covers the health contract — status codes, payload shape, browser (HTML) rendering
-and the readiness failure path — plus routing. CI runs it on every push against Python 3.12
-with a real PostgreSQL 16 + `pgvector` service.
+and the readiness failure path — plus routing. CI runs it on every push and pull request to
+`main` against Python 3.12 with a real PostgreSQL 16 + `pgvector` service.
 
 ## Roadmap
 
